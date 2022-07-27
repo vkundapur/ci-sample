@@ -25,8 +25,10 @@ jobs:
         run: bundle install
       - name: Install packages
         run: yarn install
-      - name: Build and deploy ios app to TestFlight
-        run: cd ios && fastlane ios test_flight
+      - uses: maierj/fastlane-action@v2.2.0
+        with:
+          lane: 'ios test_flight'
+          subdirectory: 'ios'
         env:
           TEMP_KEYCHAIN_USER: ${{ secrets.TEMP_KEYCHAIN_USER }}
           TEMP_KEYCHAIN_PASSWORD: ${{ secrets.TEMP_KEYCHAIN_PASSWORD }}
