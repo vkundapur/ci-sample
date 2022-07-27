@@ -10,17 +10,17 @@ jobs:
     name: Build and release iOS app
     runs-on: macOS-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - uses: actions/setup-node@v2
         with:
           node-version: '12.22.0'
-      - uses: actions/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '2.6'
+          ruby-version: '2.7'
       - name: Install Bundler
-        run: gem install bundler:2.1.4
+        run: gem install bundler:2.2.27
       - name: Install Fastlane
         run: bundle install
       - name: Install packages
