@@ -81,9 +81,9 @@ platform :ios do
     build_number = latest_testflight_build_number(version: version, api_key: api_key)
     increment_build_number(build_number: build_number + 1)
 
-    # cocoapods(
-    #   clean_install: true
-    # )
+    cocoapods(
+      clean_install: true
+    )
 
     match(
       type: 'development',
