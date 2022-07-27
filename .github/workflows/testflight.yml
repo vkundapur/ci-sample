@@ -21,6 +21,17 @@ jobs:
           ruby-version: '2.7.6'
       - name: Install Bundler
         run: gem install bundler:2.2.27
+      - uses: actions/cache@v1
+        id: cocoapods-cache
+        with:
+          path: Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+          ${{ runner.os }}-pods-
+      - name: Cocoapods
+        if: steps.cocoapods-cache.outputs.cache-hit != 'true'
+        run: |
+          bundle exec pod install
       - name: Install Fastlane
         run: bundle install
       - name: Install packages
@@ -39,3 +50,4 @@ jobs:
           DEVELOPER_APP_ID: ${{ secrets.DEVELOPER_APP_ID }}
           PROVISIONING_PROFILE_SPECIFIER: ${{ secrets.PROVISIONING_PROFILE_SPECIFIER }}
           DEVELOPER_APP_IDENTIFIER: ${{ secrets.DEVELOPER_APP_IDENTIFIER }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
