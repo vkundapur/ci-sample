@@ -33,6 +33,7 @@ jobs:
         with:
           lane: 'test_flight'
           subdirectory: 'ios'
+          verbose: true
         env:
           TEMP_KEYCHAIN_USER: ${{ secrets.TEMP_KEYCHAIN_USER }}
           TEMP_KEYCHAIN_PASSWORD: ${{ secrets.TEMP_KEYCHAIN_PASSWORD }}
