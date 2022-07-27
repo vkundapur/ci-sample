@@ -19,6 +19,10 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '2.7.6'
+      - name: setup-cocoapods
+        uses: maxim-lobanov/setup-cocoapods@v1
+        with:
+          podfile-path: ios/Podfile.lock
       - name: Install Bundler
         run: gem install bundler:2.2.27
       - name: Install Fastlane
