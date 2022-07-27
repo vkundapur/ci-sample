@@ -18,7 +18,7 @@ jobs:
           node-version: '12.22.0'
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '2.7'
+          ruby-version: '2.7.6'
       - name: Install Bundler
         run: gem install bundler:2.2.27
       - name: Install Fastlane
