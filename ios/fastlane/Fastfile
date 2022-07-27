@@ -1,0 +1,133 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+# default_platform(:ios)
+
+# platform :ios do
+#   desc "Build and upload to Test Flight"
+#   lane :beta do
+#     version = get_version_number( xcodeproj: "BookShelf.xcodeproj", target: "BookShelf" )
+#     build_number = latest_testflight_build_number(version: version)
+#     puts build_number
+#     increment_build_number(build_number: build_number + 1)
+#     build_app
+#     upload_to_testflight
+#   end
+# end
+
+default_platform(:ios)
+
+DEVELOPER_APP_ID = ENV["DEVELOPER_APP_ID"]
+BUNDLE_IDENTIFIER = ENV["BUNDLE_IDENTIFIER"]
+PROVISIONING_PROFILE_SPECIFIER = ENV["PROVISIONING_PROFILE_SPECIFIER"]
+TEMP_KEYCHAIN_USER = ENV["TEMP_KEYCHAIN_USER"]
+TEMP_KEYCHAIN_PASSWORD = ENV["TEMP_KEYCHAIN_PASSWORD"]
+APPLE_ISSUER_ID = ENV["APPLE_ISSUER_ID"]
+APPLE_KEY_ID = ENV["APPLE_KEY_ID"]
+APPLE_KEY_CONTENT = ENV["APPLE_KEY_CONTENT"]
+GIT_AUTHORIZATION = ENV["GIT_AUTHORIZATION"]
+
+def delete_temp_keychain(name)
+  delete_keychain(
+    name: name
+  ) if File.exist? File.expand_path("~/Library/Keychains/#{name}-db")
+end
+
+def create_temp_keychain(name, password)
+  create_keychain(
+    name: name,
+    password: password,
+    unlock: true,
+    timeout: 0
+  )
+end
+
+def ensure_temp_keychain(name, password)
+  delete_temp_keychain(name)
+  create_temp_keychain(name, password)
+end
+
+platform :ios do
+  lane :test_flight do
+    keychain_name = TEMP_KEYCHAIN_USER
+    keychain_password = TEMP_KEYCHAIN_PASSWORD
+    ensure_temp_keychain(keychain_name, keychain_password)
+
+    # xcversion(version: "13.2.1")
+
+    api_key = app_store_connect_api_key(
+      key_id: APPLE_KEY_ID,
+      issuer_id: APPLE_ISSUER_ID,
+      key_content: "#{APPLE_KEY_CONTENT}",
+      is_key_content_base64: true,
+      duration: 1200,
+      in_house: false
+    )
+
+    version = get_version_number( xcodeproj: "cisample.xcodeproj", target: "cisample" )
+    build_number = latest_testflight_build_number(version: version, api_key: api_key)
+    increment_build_number(build_number: build_number + 1)
+
+    cocoapods(
+      clean_install: true
+    )
+
+    match(
+      type: 'development',
+      app_identifier: "#{BUNDLE_IDENTIFIER}",
+#       git_basic_authorization: Base64.strict_encode64(GIT_AUTHORIZATION),
+      git_basic_authorization: GIT_AUTHORIZATION,
+      readonly: true,
+      # keychain_name: keychain_name,
+      # keychain_password: keychain_password,
+      api_key: api_key
+    )
+
+    match(
+      type: 'appstore',
+      app_identifier: "#{BUNDLE_IDENTIFIER}",
+#       git_basic_authorization: Base64.strict_encode64(GIT_AUTHORIZATION),
+      git_basic_authorization: GIT_AUTHORIZATION,
+      readonly: true,
+      # keychain_name: keychain_name,
+      # keychain_password: keychain_password,
+      api_key: api_key
+    )
+
+    gym(
+      configuration: "Release",
+      workspace: "cisample.xcworkspace",
+      scheme: "cisample",
+      clean: true,
+      export_method: "app-store",
+      export_options: {
+        provisioningProfiles: {
+          BUNDLE_IDENTIFIER => PROVISIONING_PROFILE_SPECIFIER
+        }
+      }
+    )
+
+#     pilot(
+#       apple_id: "#{DEVELOPER_APP_ID}",
+#       app_identifier: "#{BUNDLE_IDENTIFIER}",
+#       skip_waiting_for_build_processing: true,
+#       skip_submission: true,
+#       distribute_external: false,
+#       notify_external_testers: false,
+#     )
+
+    delete_temp_keychain(keychain_name)
+  end
+end

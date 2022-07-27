@@ -1,0 +1,8 @@
+app_identifier("com.defyner.cisample") # The bundle identifier of your app
+apple_id("vivek@defyner.com") # Your Apple email address
+
+itc_team_id("123976432") # App Store Connect Team ID
+team_id("ZPL5QLZ3GS") # Developer Portal Team ID
+
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile
