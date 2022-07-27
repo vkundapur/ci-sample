@@ -100,7 +100,7 @@ platform :ios do
       type: 'appstore',
       app_identifier: "#{BUNDLE_IDENTIFIER}",
 #       git_basic_authorization: Base64.strict_encode64(GIT_AUTHORIZATION),
-      git_basic_authorization: GIT_AUTHORIZATION,
+      git_private_key: GIT_AUTHORIZATION,
       readonly: true,
       keychain_name: keychain_name,
       keychain_password: keychain_password,
