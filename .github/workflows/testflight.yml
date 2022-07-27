@@ -3,7 +3,7 @@ name: Upload iOS to Test Flight
 on:
   push:
     branches:
-      - develop
+      - main
 
 jobs:
   release-ios:
