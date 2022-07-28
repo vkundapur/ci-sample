@@ -103,10 +103,9 @@ platform :ios do
       clean: true,
       export_method: "app-store",
       export_options: {
-        provisioningProfiles: {
-          DEVELOPER_APP_IDENTIFIER => PROVISIONING_PROFILE_SPECIFIER
-        }
+        provisioningProfiles: lane_context[SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING]
       }
+      xargs: "-allowProvisioningUpdates"
     )
 
 #     pilot(
