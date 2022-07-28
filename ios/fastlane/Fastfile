@@ -105,7 +105,6 @@ platform :ios do
       export_options: {
         provisioningProfiles: lane_context[SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING]
       }
-      xargs: "-allowProvisioningUpdates"
     )
 
 #     pilot(
