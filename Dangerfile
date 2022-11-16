@@ -7,3 +7,9 @@ warn("PR is classed as Work in Progress") if github.pr_title.include? "[WIP]"
 
 # Warn when there is a big PR
 warn("Big PR") if git.lines_of_code > 600
+
+eslint.config_file = '.eslintrc.js'
+eslint.target_extensions = ['.js', '.jsx', '.ts', '.tsx']
+eslint.filtering = true
+eslint.bin_path = "node_modules/.bin/eslint"
+eslint.lint
