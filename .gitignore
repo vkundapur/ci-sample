@@ -63,3 +63,4 @@ buck-out/
 template/plugins/typescript/template/tsconfig.json
 
 .bundle
+vendor
