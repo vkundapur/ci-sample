@@ -11,5 +11,4 @@ warn("Big PR") if git.lines_of_code > 600
 eslint.config_file = '.eslintrc.js'
 eslint.target_extensions = ['.js', '.jsx', '.ts', '.tsx']
 eslint.filtering = true
-# eslint.bin_path = "node_modules/.bin/eslint"
 eslint.lint
