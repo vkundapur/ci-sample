@@ -4,3 +4,6 @@ source 'https://rubygems.org'
 ruby '2.7.6'
 
 gem 'cocoapods', '~> 1.11', '>= 1.11.2'
+gem 'danger'
+gem 'danger-eslint'
+
