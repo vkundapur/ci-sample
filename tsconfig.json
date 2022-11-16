@@ -8,6 +8,7 @@
     "jsx": "react",
     "lib": ["es6"],
     "moduleResolution": "node",
+    "module": "es2015",
     "noEmit": true,
     "strict": true,
     "target": "esnext",
